@@ -42,7 +42,7 @@ def combination(feat_track_input, score_track_input, test_list_input): # [(a,b),
 
     return (np.hstack([pd.DataFrame(best_com2),pd.DataFrame(test_list2_input)])).tolist()
 
-class RecurrsiveFeatureSelector:
+class Recurrsive_Feature_Selector:
     def __init__(self):
         pass
         
