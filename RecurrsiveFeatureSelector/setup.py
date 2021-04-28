@@ -11,7 +11,7 @@ with open('README.md', 'r') as fh:
     
 setuptools.setup(
     name='RecurrsiveFeatureSelector', 
-    version='0.0.2',
+    version='0.0.3',
     author='Hindy Yuen', 
     author_email='hindy888@hotmail.com', 
     description='Recurrsively selecting the best features', 
