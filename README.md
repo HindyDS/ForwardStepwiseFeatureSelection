@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/HindyDS/RecurrsiveFeatureSelector/main/logo/logo.png" height="90">
+# <img src="https://raw.githubusercontent.com/HindyDS/RecurrsiveFeatureSelector/main/logo/RFS.png" height="90">
 
 RecurrsiveFeatureSelector aims to select the best features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
 
