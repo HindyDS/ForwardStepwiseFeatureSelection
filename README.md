@@ -22,7 +22,6 @@ It requires at least six arguments to run:
 - X (array): features space
 - y (array): target
 - cv (int): number of folds in a (Stratified)KFold
-- task (str): 'classification'/'regression'
 - scoring (str): see https://scikit-learn.org/stable/modules/model_evaluation.html
 
 - max_round (int): number of rounds that you wanted RFS to stop searching
