@@ -1,7 +1,9 @@
-# RecurrsiveFeatureSelector
-RFS
-RecursiveFeatureSelector aim to select the best features in machine learning tasks according to corresponding score.
-RecursiveFeatureSelector is still under development.
+# <img src="https://raw.githubusercontent.com/HindyDS/RecurrsiveFeatureSelector/main/logo/logo.png" height="90">
 
-class RecursiveFeatureSelector 
-	methods  search(model, X, y, cv, task=, scoring=, k=None, n=2, jump_start=False, base_com=None)
+RecurrsiveFeatureSelector aims to select the best features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and so on.
+
+This package is inspired by: 
+PyData DC 2016 | A Practical Guide to Dimensionality Reduction 
+Vishal Patel
+October 8, 2016
+
