@@ -21,6 +21,7 @@ It requires at least six arguments to run:
 - model: machine learning model
 - X (array): features space
 - y (array): target
+- cv (int): number of folds in a (Stratified)KFold
 - task (str): 'classification'/'regression'
 - scoring (str): see https://scikit-learn.org/stable/modules/model_evaluation.html
 
