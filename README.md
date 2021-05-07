@@ -1,5 +1,9 @@
 # <img src="https://raw.githubusercontent.com/HindyDS/RecurrsiveFeatureSelector/main/logo/RFS.png" height="90">
 
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![PyPI version](https://badge.fury.io/gh/HindyDS%2FRecurrsiveFeatureSelector.svg)](https://pypi.org/project/RecurrsiveFeatureSelector/)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
 RecurrsiveFeatureSelector aims to select the best features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
 
 This package is inspired by: 
@@ -15,9 +19,14 @@ October 8, 2016
 It requires at least six arguments to run:
 
 - model: machine learning model
-- X: features space
-- y: target
-- task: 'classification'/'regression'
-- scoring: see https://scikit-learn.org/stable/modules/model_evaluation.html
+- X (array): features space
+- y (array): target
+- task (str): 'classification'/'regression'
+- scoring (str): see https://scikit-learn.org/stable/modules/model_evaluation.html
+
+- max_round (int): number of rounds that you wanted RFS to stop searching
+- chances_to_fail (int): how many times RFS can fail to find better subset of features 
+- jump_start (list): starting point for RFS to search, must be corresponds to the columns of X
+- n_digit (int): Decimal places for scoring
 
 If you have any ideas for this packge please don't hesitate to bring forward!
