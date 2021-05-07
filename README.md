@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/HindyDS/RecurrsiveFeatureSelector/main/logo/RFS.png" height="90">
+# <img src="https://raw.githubusercontent.com/HindyDS/RecurrsiveFeatureSelector/main/logo/RFS2.png" height="90">
 
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![PyPI version](https://badge.fury.io/gh/HindyDS%2FRecurrsiveFeatureSelector.svg)](https://pypi.org/project/RecurrsiveFeatureSelector/)
