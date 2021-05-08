@@ -4,7 +4,7 @@
 [![PyPI version](https://badge.fury.io/gh/HindyDS%2FRecurrsiveFeatureSelector.svg)](https://pypi.org/project/RecurrsiveFeatureSelector/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-RecurrsiveFeatureSelector aims to select the best features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
+RecurrsiveFeatureSelector aims to select the best features or the subset of features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
 
 This package is inspired by: 
 PyData DC 2016 | A Practical Guide to Dimensionality Reduction 
