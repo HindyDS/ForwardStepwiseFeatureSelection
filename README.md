@@ -26,7 +26,7 @@ It requires at least six arguments to run:
 
 - max_round (int): number of rounds that you wanted RFS to stop searching
 - chances_to_fail (int): how many times RFS can fail to find better subset of features 
-- jump_start (list): starting point for RFS to search, must be corresponds to the columns of X
+- start_from (list): starting point for RFS to search, must be corresponds to the columns of X
 - n_digit (int): Decimal places for scoring
 
 If you have any ideas for this packge please don't hesitate to bring forward!
