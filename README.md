@@ -13,7 +13,7 @@ October 8, 2016
 
 - **Examples:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/RFS%20examples
 - **Email:** hindy888@hotmail.com
-- **Source code:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/RecursiveFeatureSelector
+- **Source code:** https://github.com/HindyDS/RecursiveFeatureSelector/blob/main/RecurrsiveFeatureSelector/__init__.py
 - **Bug reports:** https://github.com/HindyDS/RecursiveFeatureSelector/issues
 
 It requires at least six arguments to run:
