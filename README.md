@@ -11,7 +11,7 @@ PyData DC 2016 | A Practical Guide to Dimensionality Reduction
 Vishal Patel
 October 8, 2016
 
-- **Examples:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/examples
+- **Examples:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/RFS%20examples
 - **Email:** hindy888@hotmail.com
 - **Source code:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/RecursiveFeatureSelector
 - **Bug reports:** https://github.com/HindyDS/RecursiveFeatureSelector/issues
