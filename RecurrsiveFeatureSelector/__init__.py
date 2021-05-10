@@ -200,7 +200,7 @@ class RecursiveFeatureSelector:
         plt.axvline(x = np.argmax(list(self.best_score.values())) + 1, color='green', linewidth=2, linestyle='--')
         plt.ylabel(f'{scoring_str}')
         plt.xlabel('Trials')
-        plt.xticks(range(1,len(self.best_score.values()) + 1), list(rfs.best_com.values()), rotation=90)
+        plt.xticks(range(1,len(self.best_score.values()) + 1), list(self.best_com.values()), rotation=90)
         plt.title(f'Best {scoring} of each trial reached'.title())
         sns.despine();
         
