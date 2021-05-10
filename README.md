@@ -1,7 +1,7 @@
 # <img src="https://raw.githubusercontent.com/HindyDS/RecursiveFeatureSelector/main/logo/RFS%2010.5.2021.png" height="277">
 
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
-[![PyPI version](https://badge.fury.io/py/RecusiveFeatureSelector.svg)](https://badge.fury.io/py/RecursiveFeatureSelector)
+[![PyPI version](https://badge.fury.io/py/RecursiveFeatureSelector.svg)](https://badge.fury.io/py/RecursiveFeatureSelector)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 RecursiveFeatureSelector aims to select the best features or the subset of features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
