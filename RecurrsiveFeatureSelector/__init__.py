@@ -21,7 +21,7 @@ class RecursiveFeatureSelector:
         # store time spent for trials
         self.trials_time_spend = {}
         
-    def trial(self, model, X, y, cv, scoring, max_round=None, chances_to_fail=None, start_from=None, n_digit=4):
+    def trial(self, estimator, X, y, cv, scoring, max_round=None, chances_to_fail=None, start_from=None, n_digit=4):
         trial_start_time = time.time()
         n_trial = 1
         if chances_to_fail == None:
@@ -29,8 +29,8 @@ class RecursiveFeatureSelector:
         if max_round == None:
             max_round = np.inf
             
-        model_str = str(model).split('(')[0]
-        print(f'Searching the best subset of features with {model_str}...')
+        estimator_str = str(estimator).split('(')[0]
+        print(f'Searching the best subset of features with {estimator_str}...')
             
         if start_from != None and type(start_from) != list:   
             print('start_from only accept list as argument.')
@@ -61,7 +61,7 @@ class RecursiveFeatureSelector:
             # try out all features
             if n_trial == 1 and start_from == None:
                 for feature in features:
-                    cross_val_score_res = cross_val_score(model, X[feature], y, cv=cv, scoring=scoring)
+                    cross_val_score_res = cross_val_score(estimator, X[feature], y, cv=cv, scoring=scoring)
                     score = round(cross_val_score_res.mean(), n_digit)
                     std = round(cross_val_score_res.std(), n_digit)
                     feat_com[feature[0]] = score
@@ -73,7 +73,7 @@ class RecursiveFeatureSelector:
 
             if n_trial > 1 or start_from != None:
                 for feature in features:
-                    cross_val_score_res = cross_val_score(model, X[feature], y, cv=cv, scoring=scoring)
+                    cross_val_score_res = cross_val_score(estimator, X[feature], y, cv=cv, scoring=scoring)
                     score = round(cross_val_score_res.mean(), n_digit)
                     std = round(cross_val_score_res.std(), n_digit)
                     feat_com[tuple(feature)] = score
@@ -126,14 +126,14 @@ class RecursiveFeatureSelector:
                 if self.best_score[curr_key] < self.best_score[last_key]:
                     chances_to_fail = chances_to_fail - 1
             
-            print(f'Best Subset of Trial {n_trial}: ')
+            print(f'Best Subset Found in Trial {n_trial}: ')
             if type(self.best_com[f'Trial {n_trial}']) == str:
                 print('    ',self.best_com[f'Trial {n_trial}'])
                 
             if type(self.best_com[f'Trial {n_trial}']) == tuple:
                 print('    ',list(self.best_com[f'Trial {n_trial}']))
             print(' ')
-            print(f'Best {scoring.title()} of Trial {n_trial}: ')
+            print(f'Best {scoring_str} of Trial {n_trial}: ')
             print('    ',self.best_score[f'Trial {n_trial}'])
             print(' ')
             self.trial_best[self.best_com[f'Trial {n_trial}']] = self.best_score[f'Trial {n_trial}']
@@ -170,28 +170,31 @@ class RecursiveFeatureSelector:
         self.best_com = best_com2
         self.trial_best = list(max(self.trial_best, key=self.trial_best.get))
         self.summary = pd.DataFrame([self.best_com, self.best_score, self.trials_time_spend], 
-                                    index=['Best Subset', f'Best {scoring}', 'Time Spent']).T
-        self.best_subset = self.summary.iloc[np.argmax(self.summary[f'Best {scoring}']), 0]
+                                    index=['Best Subset', f'Best {scoring_str}', 'Time Spent']).T
+        self.best_subset = self.summary.iloc[np.argmax(self.summary[f'Best {scoring_str}']), 0]
         
         # store the result
         print(f'--------------------------------------------------------Trial Summary--------------------------------------------------------')
         try:
             self.res = self.best_com[f'Trial {n_trial}']
-            print(f'Best Subset: ')
+            print(f'Best Subset Found: ')
             print('    ',self.best_subset)
             print(' ')
-            print(f'Best {scoring.title()}: ')
+            print(f'Best {scoring_str}: ')
             print('    ',self.best_score[f'Trial {n_trial}'])
             print(' ')
         except:
             n_trial = n_trial - 1
             self.res = self.best_com[f'Trial {n_trial}']
-            print(f'Best Subset: ')
+            print(f'Best Subset Found: ')
             print('    ',self.best_subset)
             print(' ')
-            print(f'Best {scoring.title()}: ')
+            print(f'Best {scoring_str}: ')
             print('    ',self.best_score[f'Trial {n_trial}'])
             print(' ')
+            
+        trial_end_time = time.time()
+        print(f"Total Time Spent: {round(trial_end_time - trial_start_time, 2)}(s)")
         
         # visualizing the trials
         sns.set_theme()
@@ -199,12 +202,10 @@ class RecursiveFeatureSelector:
         sns.lineplot(x=[i + 1 for i in range(len(self.best_com.keys()))], y=self.best_score.values())
         plt.axvline(x = np.argmax(list(self.best_score.values())) + 1, color='green', linewidth=2, linestyle='--')
         plt.ylabel(f'{scoring_str}')
-        plt.xlabel('Trials')
+        plt.xlabel('Subsets')
         plt.xticks(range(1,len(self.best_score.values()) + 1), list(self.best_com.values()), rotation=90)
-        plt.title(f'Best {scoring} of each trial reached'.title())
+        plt.title(f'Best {scoring_str} of each trial reached'.title())
         sns.despine();
-        
-        trial_end_time = time.time()
-        print(f"Total Time Spent: {round(trial_end_time - trial_start_time, 2)}(s)")
+        plt.show()
         
         print(f'---------------------------------------------End of Recursive Features Selection--------------------------------------------')
