@@ -11,14 +11,14 @@ PyData DC 2016 | A Practical Guide to Dimensionality Reduction
 Vishal Patel
 October 8, 2016
 
-- **Examples:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/RFS%20examples
+- **Examples:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/examples
 - **Email:** hindy888@hotmail.com
-- **Source code:** https://github.com/HindyDS/RecursiveFeatureSelector/blob/main/RecurrsiveFeatureSelector/__init__.py
+- **Source code:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/RecursiveFeatureSelector
 - **Bug reports:** https://github.com/HindyDS/RecursiveFeatureSelector/issues
 
 It requires at least six arguments to run:
 
-- model: machine learning model
+- estimator: machine learning model
 - X (array): features space
 - y (array): target
 - cv (int): number of folds in a (Stratified)KFold
