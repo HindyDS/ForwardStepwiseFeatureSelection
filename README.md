@@ -24,6 +24,7 @@ It requires at least six arguments to run:
 - cv (int): number of folds in a (Stratified)KFold
 - scoring (str): see https://scikit-learn.org/stable/modules/model_evaluation.html
 
+Optional arguments:
 - max_round (int): number of rounds that you wanted RFS to stop searching
 - fail_tolerance (int): how many times RFS can fail to find better subset of features 
 - least_gain (int): threshold of scoring metrics gain in fraction 
