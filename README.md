@@ -25,7 +25,9 @@ It requires at least six arguments to run:
 - scoring (str): see https://scikit-learn.org/stable/modules/model_evaluation.html
 
 - max_round (int): number of rounds that you wanted RFS to stop searching
-- chances_to_fail (int): how many times RFS can fail to find better subset of features 
+- fail_tolerance (int): how many times RFS can fail to find better subset of features 
+- least_gain (int): threshold of scoring metrics gain in fraction 
+- max_feats (int): maximum number of features
 - start_from (list): starting point for RFS to search, must be corresponds to the columns of X
 - n_digit (int): Decimal places for scoring
 
