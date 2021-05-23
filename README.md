@@ -30,6 +30,9 @@ Optional arguments:
 - least_gain (int): threshold of scoring metrics gain in fraction 
 - max_feats (int): maximum number of features
 - start_from (list): starting point for RFS to search, must be corresponds to the columns of X
+- pool (nested list): if the new selected feature is in one of the particular subpool 
+		    (list in the nested list), then the features in that particular subpool with no 			    longer be avalible to form any new subset in the following trials
+- n_jobs (int): Number of jobs to run in parallel.
 - n_digit (int): Decimal places for scoring
 
 If you have any ideas for this packge please don't hesitate to bring forward!
