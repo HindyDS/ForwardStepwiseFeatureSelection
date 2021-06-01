@@ -18,21 +18,22 @@ October 8, 2016
 
 It requires at least six arguments to run:
 
-- estimator: machine learning model
+- estimators: machine learning model
 - X (array): features space
 - y (array): target
 - cv (int): number of folds in a (Stratified)KFold
 - scoring (str): see https://scikit-learn.org/stable/modules/model_evaluation.html
 
 Optional arguments:
-- max_round (int): number of rounds that you wanted RFS to stop searching
-- fail_tolerance (int): how many times RFS can fail to find better subset of features 
+- max_trial (int): number of trials that you wanted RFS to stop searching
+- tolerance (int): how many times RFS can fail to find better subset of features 
 - least_gain (int): threshold of scoring metrics gain in fraction 
 - max_feats (int): maximum number of features
-- start_from (list): starting point for RFS to search, must be corresponds to the columns of X
-- pool (nested list): if the new selected feature is in one of the particular subpool 
+- prior (list): starting point for RFS to search, must be corresponds to the columns of X
+- exclusions (nested list): if the new selected feature is in one of the particular subpool 
 		    (list in the nested list), then the features in that particular subpool with no 			    longer be avalible to form any new subset in the following trials
 - n_jobs (int): Number of jobs to run in parallel.
 - n_digit (int): Decimal places for scoring
+- verbose (int): Level of verbosity of RFS
 
 If you have any ideas for this packge please don't hesitate to bring forward!
