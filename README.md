@@ -1,18 +1,20 @@
+# <img src="https://raw.githubusercontent.com/HindyDS/ForwardStepwiseFeatureSelection/main/logo/RFS%2010.5.2021.png" height="277">
+
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![PyPI version](https://badge.fury.io/py/RecursiveFeatureSelector.svg)](https://badge.fury.io/py/RecursiveFeatureSelector)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-RecursiveFeatureSelector aims to select the best features or the subset of features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
+ForwardStepwiseFeatureSelection aims to select the best features or the subset of features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
 
 This package is inspired by: 
 PyData DC 2016 | A Practical Guide to Dimensionality Reduction 
 Vishal Patel
 October 8, 2016
 
-- **Examples:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/examples
+- **Examples:** https://github.com/HindyDS/ForwardStepwiseFeatureSelection/tree/main/examples
 - **Email:** hindy888@hotmail.com
-- **Source code:** https://github.com/HindyDS/RecursiveFeatureSelector/tree/main/RecursiveFeatureSelector
-- **Bug reports:** https://github.com/HindyDS/RecursiveFeatureSelector/issues
+- **Source code:** https://github.com/HindyDS/ForwardStepwiseFeatureSelection/tree/main/ForwardStepwiseFeatureSelection
+- **Bug reports:** https://github.com/HindyDS/ForwardStepwiseFeatureSelection/issues
 
 It requires at least six arguments to run:
 
