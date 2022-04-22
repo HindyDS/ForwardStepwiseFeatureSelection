@@ -8,33 +8,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import time
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, TimeSeriesSplit
 
 __author__ = 'Yuen Shing Yan Hindy'
 __license__= 'MIT License'
 __contact__ = 'https://github.com/HindyDS/ForwardStepwiseFeatureSelection'
 
 class ForwardStepwiseFeatureSelection:
-    def __init__(self):
-        self.best_subsets = {}  
-        self.summaries = {}
-
-    def fit(self, X, y):
-        self.X = X
-        self.y = y
-        
-    def search(self, estimators, cv, scoring, max_trial=None, tolerance=None, least_gain=None, max_feats=None, prior=None, exclusions=None, n_jobs=-1, n_digit=4, verbose=1):
-        X = self.X
-        y = self.y
-        trial_start_time = time.time()
+    def __init__(self, estimators, cv, scoring, mode=None, max_trial=None, tolerance=None, least_gain=None, max_feats=None, prior=None, exclusions=None, n_jobs=-1, n_digit=4, verbose=1):
+        self.estimators = estimators
+        self.cv = cv
+        self.scoring = scoring
+        self.mode = mode
         self.max_trial = max_trial
         self.tolerance = tolerance
+        self.least_gain = least_gain
         self.max_feats = max_feats
-        
-        if type(estimators) != list:
-            estimators = [estimators]
+        self.prior = prior
+        self.exclusions = exclusions
+        self.n_jobs = n_jobs
+        self.n_digit = n_digit
+        self.verbose = verbose
 
-        for estimator in estimators:
+        self.best_subsets = {}  
+        self.summaries = {}
+        
+    def fit(self, X, y):
+        trial_start_time = time.time()
+        
+        if type(self.estimators) != list:
+            self.estimators = [self.estimators]
+
+        for estimator in self.estimators:
             max_trial = self.max_trial
             tolerance = self.tolerance
             max_feats = self.max_feats
@@ -44,76 +49,76 @@ class ForwardStepwiseFeatureSelection:
             trials_time_spend = {} # keys:n_trial, val: time spent 
             n_trial = 1
 
-            if exclusions == None:
-                exclusions = [[]]
-            mainpool = exclusions.copy()
-            if prior != None:
-                for feature in prior:
+            if self.exclusions == None:
+                self.exclusions = [[]]
+            mainpool = self.exclusions.copy()
+            if self.prior != None:
+                for feature in self.prior:
                     for subpool in mainpool:
                         if feature in subpool:
-                            raise Exception(f'''The feature "{feature}" in prior is in one of the subpool from exclusions.
+                            raise Exception(f'''The feature "{feature}" in self.prior is in one of the subpool from self.exclusions.
                    Please either: 
                    1) Remove {feature} from the corresponding subpool
-                   2) Remove {feature} from prior or
-                   3) Remove corresponding subpool from exclusions
+                   2) Remove {feature} from self.prior or
+                   3) Remove corresponding subpool from self.exclusions
                    ''')
 
-            if tolerance != None:    
-                if tolerance < 0 or isinstance(tolerance, int) != True:
-                    raise Exception('tolerance must be positive integer.')
-            if tolerance == None:
-                tolerance = 1
+            if self.tolerance != None:    
+                if self.tolerance < 0 or isinstance(self.tolerance, int) != True:
+                    raise Exception('self.tolerance must be positive integer.')
+            if self.tolerance == None:
+                self.tolerance = 1
 
-            if max_trial != None:
-                if max_trial < 0 or isinstance(max_trial, int) != True:
-                    raise Exception('max_trial must be positive integer.')    
-            if max_trial == None:
-                max_trial = 99999999999999
+            if self.max_trial != None:
+                if self.max_trial < 0 or isinstance(self.max_trial, int) != True:
+                    raise Exception('self.max_trial must be positive integer.')    
+            if self.max_trial == None:
+                self.max_trial = 99999999999999
 
-            if least_gain != None:
+            if self.least_gain != None:
                 if least_gain < 0 != True:
                     raise Exception('least_gain must be positive number.')
 
-            if max_feats != None:
-                if max_feats < 0 or isinstance(max_feats, int) != True:
-                    raise Exception('max_feats must be positive integer.')
-            if max_feats == None:
-                max_feats = 99999999999999
+            if self.max_feats != None:
+                if self.max_feats < 0 or isinstance(self.max_feats, int) != True:
+                    raise Exception('self.max_feats must be positive integer.')
+            if self.max_feats == None:
+                self.max_feats = 99999999999999
 
-            if prior != None:
-                if isinstance(prior, list) != True:
-                    raise Exception('prior must be a list of features.')
+            if self.prior != None:
+                if isinstance(self.prior, list) != True:
+                    raise Exception('self.prior must be a list of features.')
 
-            if n_digit != None:
-                if n_digit < 0 or isinstance(n_digit, int) != True:
-                    raise Exception('n_digit must be positive integer.')
-            if n_digit == None:
-                n_digit = 9   
+            if self.n_digit != None:
+                if self.n_digit < 0 or isinstance(self.n_digit, int) != True:
+                    raise Exception('self.n_digit must be positive integer.')
+            if self.n_digit == None:
+                self.n_digit = 9   
             
             estimator_str = str(estimator).split('(')[0]
             
             print(' ')
-            if verbose >= 2:
+            if self.verbose >= 2:
                 print(f'Searching the best subset of features with {estimator_str}...')
-            if prior != None:
-                print(f'Starting with {prior}...')
+            if self.prior != None:
+                print(f'Starting with {self.prior}...')
 
-            if prior != None and type(prior) != list:   
-                print('prior only accept list as argument.')
+            if self.prior != None and type(self.prior) != list:   
+                print('self.prior only accept list as argument.')
                 return 
 
-            if prior != None:
+            if self.prior != None:
                 features2 =[]
-                if type(prior) == list:
+                if type(self.prior) == list:
                     features = list(X.columns)
-                    for f in prior:
+                    for f in self.prior:
                         features.remove(f)
 
                     for feat in features:
-                        features2.append(prior + [feat])
+                        features2.append(self.prior + [feat])
                 features = features2
 
-            if prior == None:    
+            if self.prior == None:    
                 features = []
                 for feature in X.columns:
                     features.append([feature])
@@ -122,33 +127,43 @@ class ForwardStepwiseFeatureSelection:
                 start_time = time.time()
                 # features as keys, score as values
                 feat_com = {}
-                if verbose > 2:
+                if self.verbose > 2:
                     print(f'----------------------------------------------------------Trial {n_trial}----------------------------------------------------------')
                 in_trial_count = 1
                 # try out all features
-                if n_trial == 1 and prior == None:
+                if n_trial == 1 and self.prior == None:
                     for feature in features:
-                        cross_val_score_res = cross_val_score(estimator, X[feature], y, cv=cv, scoring=scoring, n_jobs=n_jobs)
-                        score = round(cross_val_score_res.mean(), n_digit)
-                        std = round(cross_val_score_res.std(), n_digit)
+                        if self.mode == 'ts':
+                            cv = TimeSeriesSplit(n_splits=self.cv).split(X[feature])
+                        else:
+                            cv = self.cv
+
+                        cross_val_score_res = cross_val_score(estimator, X[feature], y, cv=cv, scoring=self.scoring, n_jobs=self.n_jobs)
+                        score = round(cross_val_score_res.mean(), self.n_digit)
+                        std = round(cross_val_score_res.std(), self.n_digit)
                         feat_com[feature[0]] = score
-                        scoring_str = ' '.join(scoring.split('_')).title().replace('Neg', 'Negative').replace('Rand', 'Random').replace('Max', 'Maximum')
-                        if verbose > 3:
+                        self.scoring_str = ' '.join(self.scoring.split('_')).title().replace('Neg', 'Negative').replace('Rand', 'Random').replace('Max', 'Maximum')
+                        if self.verbose > 3:
                             print(f'{in_trial_count}/{len(features)}: {feature}')
-                            print(f'      {scoring_str}: {score}, Standard Deviation: {std}')
+                            print(f'      {self.scoring_str}: {score}, Standard Deviation: {std}')
                             print(' ')
                         in_trial_count += 1
 
-                if n_trial > 1 or prior != None:
+                if n_trial > 1 or self.prior != None:
                     for feature in features:
-                        cross_val_score_res = cross_val_score(estimator, X[feature], y, cv=cv, scoring=scoring, n_jobs=n_jobs)
-                        score = round(cross_val_score_res.mean(), n_digit)
-                        std = round(cross_val_score_res.std(), n_digit)
+                        if self.mode == 'ts':
+                            cv = TimeSeriesSplit(n_splits=self.cv).split(X[feature])
+                        else:
+                            cv = self.cv
+
+                        cross_val_score_res = cross_val_score(estimator, X[feature], y, cv=cv, scoring=self.scoring, n_jobs=self.n_jobs)
+                        score = round(cross_val_score_res.mean(), self.n_digit)
+                        std = round(cross_val_score_res.std(), self.n_digit)
                         feat_com[tuple(feature)] = score
-                        scoring_str = ' '.join(scoring.split('_')).title().replace('Neg', 'Negative').replace('Rand', 'Random').replace('Max', 'Maximum')
-                        if verbose >= 3:
+                        self.scoring_str = ' '.join(self.scoring.split('_')).title().replace('Neg', 'Negative').replace('Rand', 'Random').replace('Max', 'Maximum')
+                        if self.verbose >= 3:
                             print(f'{in_trial_count}/{len(features)}: {feature}')
-                            print(f'      {scoring_str}: {score}, Standard Deviation: {std}')
+                            print(f'      {self.scoring_str}: {score}, Standard Deviation: {std}')
                             print(' ')
                         in_trial_count += 1
 
@@ -159,13 +174,13 @@ class ForwardStepwiseFeatureSelection:
                 # define the current trial best
                 curr_trial_best = best_com[f'Trial {n_trial}']
 
-                if n_trial == 1 and prior == None:
+                if n_trial == 1 and self.prior == None:
                     # features without the selected trial best
                     features.remove([curr_trial_best])
                     # generating new Subsets of features
                     features = [[curr_trial_best]+[i][0] for i in features]
 
-                if n_trial > 1 or prior != None:
+                if n_trial > 1 or self.prior != None:
                     curr_trial_best2 = list(best_com.values())
                     features.remove(list(curr_trial_best2[n_trial-1]))
                     if type(curr_trial_best2[n_trial-2]) == tuple:
@@ -213,11 +228,11 @@ class ForwardStepwiseFeatureSelection:
 
                         index = []                               # remove unmatched length subset
                         for idx, feature in enumerate(features):
-                            if prior != None:
-                                if len(feature) != n_trial + 1 + len(prior):
+                            if self.prior != None:
+                                if len(feature) != n_trial + 1 + len(self.prior):
                                     index.append(idx)
 
-                            if prior == None:
+                            if self.prior == None:
                                 if len(feature) != n_trial + 1:
                                     index.append(idx)
 
@@ -230,18 +245,18 @@ class ForwardStepwiseFeatureSelection:
                 last_key = f'Trial {n_trial - 1}'
 
                 if last_key != 'Trial 0':
-                    if least_gain == None:
+                    if self.least_gain == None:
                         if best_score[curr_key] < best_score[last_key]:  # if fail to improve score, then take away one chance
-                            tolerance = tolerance - 1
-                            if verbose > 2:
-                                print(f'Failed to improve {scoring_str}.')
-                    if least_gain != None:                                         # if fail to improve score by a certain percentage, then take away one chance
+                            self.tolerance = self.tolerance - 1
+                            if self.verbose > 2:
+                                print(f'Failed to improve {self.scoring_str}.')
+                    if self.least_gain != None:                                         # if fail to improve score by a certain percentage, then take away one chance
                         if (best_score[curr_key] - best_score[last_key])/best_score[last_key] < least_gain:
-                            tolerance = tolerance - 1
-                            if verbose > 2:
-                                print(f'Failed to improve {scoring_str} by {least_gain * 100}%.')
+                            self.tolerance = self.tolerance - 1
+                            if self.verbose > 2:
+                                print(f'Failed to improve {self.scoring_str} by {least_gain * 100}%.')
                             
-                if verbose >= 3:
+                if self.verbose >= 3:
                     print(f'Best Subset Found in Trial {n_trial}: ')
                     if type(best_com[f'Trial {n_trial}']) == str:
                         print('    ',best_com[f'Trial {n_trial}'])
@@ -249,37 +264,37 @@ class ForwardStepwiseFeatureSelection:
                     if type(best_com[f'Trial {n_trial}']) == tuple:
                         print('    ',list(best_com[f'Trial {n_trial}']))
                     print(' ')
-                    print(f'Best {scoring_str} of Trial {n_trial}: ')
+                    print(f'Best {self.scoring_str} of Trial {n_trial}: ')
                     print('    ',best_score[f'Trial {n_trial}'])
                     print(' ')
                 
                 n_trial += 1
-                max_trial = max_trial - 1
+                self.max_trial = self.max_trial - 1
 
                 end_time = time.time()
                 
                 trials_time_spend[f'Trial {n_trial - 1}'] = round(end_time - start_time, 2)
-                if verbose > 2:
+                if self.verbose > 2:
                     print(f"Time Spent for Trial {n_trial - 1}: {round(end_time - start_time, 2)}(s)")
                     print(' ')
 
-                if tolerance <= 0:           
-                    if verbose > 2:
-                        print('Fail tolerance exceeded.')
+                if self.tolerance <= 0:           
+                    if self.verbose > 2:
+                        print('Fail self.tolerance exceeded.')
                         print('Trial stops.')
                     break
-                if max_trial <= 0:
-                    if verbose > 2:
+                if self.max_trial <= 0:
+                    if self.verbose > 2:
                         print('Round maximum reached.')
                         print('Trial stops.')
                     break
                 if len(features) <= 0:
-                    if verbose > 2:
+                    if self.verbose > 2:
                         print('All features subsets have been tried out.')
                     break
-                if max_feats == n_trial - 1:
-                    if verbose >= 2:
-                        print(f'Top {max_feats} features have been selected.')
+                if self.max_feats == n_trial - 1:
+                    if self.verbose >= 2:
+                        print(f'Top {self.max_feats} features have been selected.')
                     break    
 
             best_com2 = {}
@@ -293,50 +308,50 @@ class ForwardStepwiseFeatureSelection:
 
             best_com = best_com2
             self.summary = pd.DataFrame([best_com, best_score, trials_time_spend], 
-                                        index=['Best Subset', f'Best {scoring_str}', 'Time Spent']).T
+                                        index=['Best Subset', f'Best {self.scoring_str}', 'Time Spent']).T
             
-            best_subset = self.summary.sort_values(f'Best {scoring_str}', ascending=False).iloc[0, 0]
+            best_subset = self.summary.sort_values(f'Best {self.scoring_str}', ascending=False).iloc[0, 0]
             best_score_all = max(self.summary.iloc[:, 1])
                 
             self.summaries[estimator_str] = self.summary
             self.best_subsets[estimator_str] = best_subset               
             
             # store the result
-            if verbose >= 2:
+            if self.verbose >= 2:
                 print(f'--------------------------------------------------------Trial Summary--------------------------------------------------------')
             try:
-                if verbose >= 2:
+                if self.verbose >= 2:
                     print(f'Best Subset Found: ')
                     print('    ',best_subset)
                     print(' ')
-                    print(f'Best {scoring_str}: ')
+                    print(f'Best {self.scoring_str}: ')
                     print('    ',best_score_all)
                     print(' ')
             except:
-                if verbose >= 2:
+                if self.verbose >= 2:
                     n_trial = n_trial - 1
                     print(f'Best Subset Found: ')
                     print('    ',best_subset)
                     print(' ')
-                    print(f'Best {scoring_str}: ')
+                    print(f'Best {self.scoring_str}: ')
                     print('    ',best_score_all)
                     print(' ')
                 
             trial_end_time = time.time()
             print(f"Total Time Spent: {round(trial_end_time - trial_start_time, 2)}(s)")
             
-            if verbose > 0:
+            if self.verbose > 0:
                 # visualizing the trials
                 sns.set_theme()
                 fig, ax = plt.subplots(figsize=(15, 6))  
                 #sns.lineplot(x=[i + 1 for i in range(len(best_com.keys()))], y=best_score.values(), markers=True)
-                plt.plot(self.summary[f'Best {scoring_str}'], marker='o')
+                plt.plot(self.summary[f'Best {self.scoring_str}'], marker='o')
                 plt.axvline(x = np.argmax(list(best_score.values())), color='black', linewidth=2, linestyle='--')
-                plt.ylabel(f'{scoring_str}')
+                plt.ylabel(f'{self.scoring_str}')
                 plt.xlabel('Subsets')
-                n_f = len(self.summary['Best Subset'].iloc[np.argmax(self.summary[f'Best {scoring_str}'])])
-                plt.legend([f'Best {scoring_str}', f'n_features = {n_f}'])
-                plt.title(f'Best {scoring_str} reached of each trial ({estimator_str})'.title())
+                n_f = len(self.summary['Best Subset'].iloc[np.argmax(self.summary[f'Best {self.scoring_str}'])])
+                plt.legend([f'Best {self.scoring_str}', f'n_features = {n_f}'])
+                plt.title(f'Best {self.scoring_str} reached of each trial ({estimator_str})'.title())
                 sns.despine();
                 plt.show()
                 print(f'--------------------------------End of Forward Stepwise Feature Selection Features Selection ({estimator_str})-------------------------------')
@@ -344,17 +359,17 @@ class ForwardStepwiseFeatureSelection:
     def template(self):
         print(
             '''
-            .search(estimators=estimator, 
+            .search(self.estimators=estimator, 
            X=X_train, 
            y=y_train, 
            cv=5, 
-           scoring=scoring, 
-           max_trial=None, 
-           tolerance=1, 
+           self.scoring=self.scoring, 
+           self.max_trial=None, 
+           self.tolerance=1, 
            least_gain=None,
-           prior=None,
-           exclusions=None,
-           n_digit=4, 
-           verbose=4)
+           self.prior=None,
+           self.exclusions=None,
+           self.n_digit=4, 
+           self.verbose=4)
            '''
         )
