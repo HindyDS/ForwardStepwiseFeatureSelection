@@ -6,6 +6,48 @@
 
 ForwardStepwiseFeatureSelection aims to select the best features or the subset of features in machine learning tasks according to corresponding score with other incredible packages like numpy, pandas and sklearn.
 
+## Quick Start
+	# Install ForwardStepwiseFeatureSelection
+	!pip install ForwardStepwiseFeatureSelection
+	
+## Quick Example
+	# Import dependenices
+	from ForwardStepwiseFeatureSelection import ForwardStepwiseFeatureSelection
+	from sklearn.model_selection import train_test_split
+	from sklearn.preprocessing import StandardScaler
+	from sklearn.ensemble import RandomForestRegressor
+	import pandas as pd
+
+	# Read dataframe
+	insurance = pd.read_csv('insurance.csv')
+
+	# Label Encoding
+	for col in ['sex', 'smoker', 'region']:
+	    insurance[col].replace(insurance[col].unique(), range(insurance[col].nunique()), inplace=True)
+
+	X = insurance.drop('charges', axis=1)
+	y = insurance['charges']
+
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+	# Scale our data
+	scaler = StandardScaler()
+	X_train, X_test = (pd.DataFrame(scaler.fit_transform(df), columns=df.columns) for df in [X_train, X_test])
+	X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+	# Instantiate the estimator
+	rfc = RandomForestRegressor()
+
+	# Instantiate ForwardStepwiseFeatureSelection
+	fsfs = ForwardStepwiseFeatureSelection(estimators=rfc, cv=3, scoring='neg_mean_absolute_error', mode=None, verbose=1, tolerance=3)
+
+	# Start feature selection
+	fsfs.fit(X_train, y_train)
+
+	print(fsfs.best_subsets)
+	
+	>> {'RandomForestRegressor': ['smoker', 'age', 'bmi', 'children', 'region']}
+
 This package is inspired by: 
 PyData DC 2016 | A Practical Guide to Dimensionality Reduction 
 Vishal Patel
