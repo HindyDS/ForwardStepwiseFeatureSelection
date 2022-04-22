@@ -25,6 +25,7 @@ It requires at least six arguments to run:
 - scoring (str): see https://scikit-learn.org/stable/modules/model_evaluation.html
 
 Optional arguments:
+- mode (string): None or 'ts'. If 'ts' (Time Series) than it will change to walk forward cross validation. 
 - max_trial (int): number of trials that you wanted FSFS to stop searching
 - tolerance (int): how many times FSFS can fail to find better subset of features 
 - least_gain (int): threshold of scoring metrics gain in fraction 
